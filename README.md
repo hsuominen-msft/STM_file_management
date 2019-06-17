@@ -10,7 +10,7 @@ pip install -e .\
 # Usage
 Load the package and open a flat file.
 ```
-from mtrx.flatfile import FlatFile
+from mtrx.flatFile import FlatFile
 
 ff = FlatFile(filepath)
 ```
@@ -39,7 +39,7 @@ axes_dict = {
                 'Y': 'Default_4::XYScanner_4::Y',
                 }
 
-ff = flatfile_3.FlatFile(filepath, axes_keys=axes_dict)
+ff = FlatFile(filepath, axes_keys=axes_dict)
 ```
 
 # File conversion (MATRIX -> FFF)
