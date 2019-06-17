@@ -35,3 +35,21 @@ axes_dict = {
 
 ff = flatfile_3.FlatFile(filepath, axes_keys=axes_dict)
 ```
+
+# File conversion (MATRIX -> FFF)
+Ensure that Vernissage is installed on the computer you intend to run this on, then set the it's path
+```
+import mtrx2flat
+
+mtrx2flat.set_vernissagecmd_path('C:\\Program Files\\Scienta Omicron\\Vernissage\\V2.4.1\\Bin\\VernissageCmd.exe')
+```
+
+You can then convert all .mtrx files in a certain folder to flat files painlessly
+```
+# matrix file directory
+input_dir = './20190528'
+# flat file directory
+output_dir = './20190528-output'
+
+mtrx2flat.convert(input_dir, output_dir)
+```
