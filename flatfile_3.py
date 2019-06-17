@@ -111,7 +111,8 @@ class FlatFile():
         Omicron Flat File Format.
     """
 
-    def __init__(self, filename):
+    #
+    def __init__(self, filename, axes_keys=None):
         """ \arg filename should be a valid path to a omicron flat file."""
 
         self.filename = filename
@@ -127,6 +128,18 @@ class FlatFile():
         # compatible with the breaking change of Matrix v3.1.
         #
         self.axis_keys = {}
+        
+
+        # Allow manual override of axes as we don't know how to programmatically identify them for multitip setups
+        if axes_keys is None:
+            self.axis_keys['MATRIX V4.3.5-_v1849-tag-release-MatrixKit_4.3.5-207245'] = {
+                'V': 'Default_4::Spectroscopy_4::V',
+                'X': 'Default_4::XYScanner_4::X',
+                'Y': 'Default_4::XYScanner_4::Y',
+                }
+        else:
+            self.axis_keys['MATRIX V4.3.5-_v1849-tag-release-MatrixKit_4.3.5-207245'] = axes_keys
+
         # MATRIX V3.3.1 - added by PCC
         self.axis_keys['MATRIX V3.3.1-_v1639-tag-release-MatrixKit_3.3.1-195903'] = {
             'V': 'Default::Spectroscopy::V',
@@ -421,7 +434,7 @@ class FlatFile():
 
             for j in range(deploymentCount) :
 
-                 self.experimentDeployement[instanceName][self._readString()] = self._readString()
+                self.experimentDeployement[instanceName][self._readString()] = self._readString()
 
         assert self.file.read() == b'', 'There are still some unknown information at the end of the file %s '.format(self.filename)
 
@@ -467,9 +480,9 @@ class FlatFile():
                 'runcycle' : 'Run %i – cycle %i\n' % \
                     (self.experimentInfo['Run Cycle'],
                      self.experimentInfo['Scan Cycle']),
-                'current' : self.experimentElement['Regulator']\
+                'current' : self.experimentElement['Regulator_1']\
                                         ['Setpoint_1']['value'],
-                'vgap' : self.experimentElement['GapVoltageControl']\
+                'vgap' : self.experimentElement['GapVoltageControl_1']\
                                         ['Voltage']['value'],
                 'offset' : self.offset
                 }
