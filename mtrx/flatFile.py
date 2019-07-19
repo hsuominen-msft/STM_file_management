@@ -488,7 +488,7 @@ class FlatFile():
                 }
 
         if self.isTopography():
-
+            if DEBUG : print('Topography file')
             sizeX = int(self.axis[self.axis_keys['X']]['clockCount']/(self.axis[self.axis_keys['X']]['mirrored']+1))
             sizeY = int(self.axis[self.axis_keys['Y']]['clockCount']/(self.axis[self.axis_keys['Y']]['mirrored']+1))
 
@@ -541,6 +541,7 @@ class FlatFile():
                 self.data.append(DataArray(self.rawData, info))
 
         elif self.isVPointSpectroscopy():
+            if DEBUG : print('V point spectroscopy file')
             # PCC changed sizeV to be explicitely an integer only for indexing purposes
             sizeV = int(self.axis[self.axis_keys['V']]['clockCount']/(self.axis[self.axis_keys['V']]['mirrored']+1))
 
@@ -560,6 +561,7 @@ class FlatFile():
                 self.data.append(DataArray(self.rawData[:sizeV-1:-1], info))
 
         elif self.isZPointSpectroscopy():
+            if DEBUG : print('Z point spectroscopy file')
             # FIXME Implement izcurve
             print("Not implemented")
 
@@ -567,6 +569,7 @@ class FlatFile():
 
 
         elif self.isGridSpectroscopy():
+            if DEBUG : print('Grid spectroscopy file')
 
             infoX = self.axis[self.axis_keys['V']]['tableSets'][self.axis_keys['X']][0]
             infoY = self.axis[self.axis_keys['V']]['tableSets'][self.axis_keys['Y']][0]
