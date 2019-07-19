@@ -197,6 +197,9 @@ class FlatFile():
 
             self.axis[axisName] = {}
 
+            # Grab axis key from it's name. This should be part of the set {X,Y,V}, no checking is done for the time being
+            self.axis[axisName]['key'] = axisName.split("::")[-1]
+
             # Trigger axis name
             self.axis[axisName]['trigger'] = self._readString()
 
@@ -248,6 +251,9 @@ class FlatFile():
 
         self.dimension = len(self.axis)
 
+        # Override axis keys with ones found in this file.
+        # TODO: Unclear if this is robust enough to always work
+        self.axis_keys['MATRIX V4.3.5-_v1849-tag-release-MatrixKit_4.3.5-207245'] = {v["key"]:k for k,v in self.axis.items()}
 
         #
         # Channel Description :
