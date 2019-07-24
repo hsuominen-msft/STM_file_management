@@ -12,7 +12,8 @@ __email__ = "toby.gill.09@ucl.ac.uk"
 import os  # Used to navigate through directories.
 import subprocess  # Used to process command line arguments.
 from copy import copy  # Used to create copied instances of variables.
-
+import glob
+import numpy as np
 
 # Define the default vernissagecmd.exe file path.
 default_vernissagecmd_path = os.path.abspath('C:/Program Files (x86)/Omicron NanoTechnology/Vernissage/V2.1/Bin/'
@@ -101,10 +102,22 @@ def convert(input_dir, output_dir, verbose=True, stdout=None, stderr=None):
             print('Creating {output}'.format(output=output_dir))
         os.mkdir(output_dir)  # Creates output directory.
 
+    files = [f for f in glob.glob(input_dir + "/*")]
+    no_files = len(files)
+
+    chunk_size = 10
+    chunks = int(no_files/chunk_size)
+
+    if no_files <= chunk_size:
+        chunked_files = [[files]] 
+    else:
+        chunked_files = np.array_split(files, chunks)
+
+    instructions = [str.join(' ', ['-file "{file}"'.format(file=f) for f in chunk]) for chunk in chunked_files]
+
     # Construct a str of command line arguments to pass to subprocess.
     cmd_list = str.join(' ', (vernissagecmd_path,  # VernissageCmd.exe file path.
                               # VernissageCmd.exe arguments
-                              '-path "{path}"'.format(path=input_dir),  # input directory path.
                               '-outdir "{outdir}"'.format(outdir=output_dir),  # output directory path.
                               '-exporter {exporter}'.format(exporter=vernissage_exporter)))  # exporter to be used.
     print(cmd_list)
@@ -112,4 +125,6 @@ def convert(input_dir, output_dir, verbose=True, stdout=None, stderr=None):
         print('Converting data to: {out}'.format(out=output_dir))
 
     # run command line arguments.
-    subprocess.run(cmd_list, stdout=stdout, stderr=stderr)
+    for i, filelist in enumerate(instructions):
+        subprocess.run(cmd_list + " " + filelist, stdout=stdout, stderr=stderr)
+        print("Finished processing "+(i*chunk_size)+" files")
