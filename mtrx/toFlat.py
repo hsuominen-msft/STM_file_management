@@ -127,4 +127,4 @@ def convert(input_dir, output_dir, verbose=True, stdout=None, stderr=None):
     # run command line arguments.
     for i, filelist in enumerate(instructions):
         subprocess.run(cmd_list + " " + filelist, stdout=stdout, stderr=stderr)
-        print("Finished processing "+(i*chunk_size)+" files")
+        print("Finished processing "+str(i*chunk_size)+" files")
